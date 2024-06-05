@@ -1,0 +1,18 @@
+name: "Breanna Morrison PhD"                                
+output_dir: "."
+navbar:
+  title: "Breanna Morrison PhD"                            
+  left:
+    - text: "Home"
+      icon: icon/house-solid.svg
+      href: index.html              
+    - text: "Experience"
+      icon: fa-scroll
+      href: experience.html   
+    - text: "Projects"
+      icon: fa-laptop-code
+      href: projects.html  
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
