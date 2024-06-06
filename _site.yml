@@ -3,15 +3,24 @@ output_dir: "."
 navbar:
   title: "Breanna Morrison PhD"                            
   left:
-    - text: "Home"
-      icon: icon/house-solid.svg
+    - text: "Intro"
+      icon: fa-house
       href: index.html              
     - text: "Experience"
       icon: fa-scroll
       href: experience.html   
     - text: "Projects"
       icon: fa-laptop-code
-      href: projects.html  
+      href: projects.html
+      menu:
+      - text: Spotify Library Analysis
+        href: albums.html
+      - text: Effect of Overfitting Models
+        href: overfit.html
+      - text: Hell’s Kitchen Analysis
+        href: hellskitchen.html
+      - text: R Shiny for South Korea Trip
+        href: pics/koreatrip.mp4 
 output:
   html_document:
     theme: cosmo
