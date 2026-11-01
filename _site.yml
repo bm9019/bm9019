@@ -1,27 +1,22 @@
-name: "Breanna Morrison PhD"                                
+name: "bm9019"
 output_dir: "."
 navbar:
-  title: "Breanna Morrison PhD"                            
+  title: "Breanna Morrison, PhD"
   left:
     - text: "Intro"
-      icon: fa-house
-      href: index.html              
+      href: index.html
     - text: "Experience"
-      icon: fa-scroll
-      href: experience.html   
+      href: experience.html
     - text: "Projects"
-      icon: fa-laptop-code
-      href: projects.html
       menu:
-      - text: Spotify Library Analysis
-        href: albums.html
-      - text: Effect of Overfitting Models
-        href: overfit.html
-      - text: Hell’s Kitchen Analysis
-        href: hellskitchen.html
-      - text: R Shiny for South Korea Trip
-        href: pics/koreatrip.mp4 
+        - text: "Spotify Library Analysis"
+          href: albums.html
+        - text: "Effect of Overfitting Models"
+          href: overfit.html
+        - text: "Hell's Kitchen Analysis"
+          href: hellskitchen.html
+        - text: "R Shiny for South Korea Trip"
+          href: pics/koreatrip.mp4
 output:
   html_document:
-    theme: cosmo
-    highlight: textmate
+    css: ["site.css"]

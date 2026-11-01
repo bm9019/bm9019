@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -30,18 +30,16 @@
        code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
        pre:not([class]) { background-color: white }</style>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/htmltools-fill-0.5.8.1/fill.css" rel="stylesheet" />
 <script src="site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
-<script src="site_libs/plotly-binding-4.10.1/plotly.js"></script>
+<script src="site_libs/plotly-binding-4.10.4/plotly.js"></script>
 <script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
 <link href="site_libs/crosstalk-1.2.1/css/crosstalk.min.css" rel="stylesheet" />
 <script src="site_libs/crosstalk-1.2.1/js/crosstalk.min.js"></script>
 <link href="site_libs/plotly-htmlwidgets-css-2.11.1/plotly-htmlwidgets.css" rel="stylesheet" />
 <script src="site_libs/plotly-main-2.11.1/plotly-latest.min.js"></script>
-<link href="site_libs/font-awesome-6.4.2/css/all.min.css" rel="stylesheet" />
-<link href="site_libs/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet" />
 
 <style type="text/css">
   code{white-space: pre-wrap;}
@@ -68,8 +66,7 @@ if (window.hljs) {
 
 
 
-<link rel="stylesheet" href="main.css" type="text/css" />
-<link rel="stylesheet" href="noscript.css" type="text/css" />
+<link rel="stylesheet" href="site.css" type="text/css" />
 
 
 
@@ -250,28 +247,18 @@ $(document).ready(function () {
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.html">Breanna Morrison PhD</a>
+      <a class="navbar-brand" href="index.html">Breanna Morrison, PhD</a>
     </div>
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
-    <span class="fa fa-house"></span>
-     
-    Intro
-  </a>
+  <a href="index.html">Intro</a>
 </li>
 <li>
-  <a href="experience.html">
-    <span class="fa fa-scroll"></span>
-     
-    Experience
-  </a>
+  <a href="experience.html">Experience</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-    <span class="fa fa-laptop-code"></span>
-     
     Projects
      
     <span class="caret"></span>
@@ -284,7 +271,7 @@ $(document).ready(function () {
       <a href="overfit.html">Effect of Overfitting Models</a>
     </li>
     <li>
-      <a href="hellskitchen.html">Hell’s Kitchen Analysis</a>
+      <a href="hellskitchen.html">Hell's Kitchen Analysis</a>
     </li>
     <li>
       <a href="pics/koreatrip.mp4">R Shiny for South Korea Trip</a>
@@ -307,14 +294,8 @@ $(document).ready(function () {
 </div>
 
 
-<html>
-<center>
-<h2 style="color:#ffffff;">
-Hell’s Kitchen Contestants Analysis
-</h2>
-</center>
-</div>
-</html>
+<div id="hells-kitchen-contestants-analysis" class="section level2">
+<h2>Hell’s Kitchen Contestants Analysis</h2>
 <p>Ever since watching the first few seasons of Hell’s Kitchen I was
 wondering about the demographic break down of the participants and their
 final ranking. However, I have not actually watched all the seasons so
@@ -331,11 +312,12 @@ Kitchen Wiki</a> has data on all seasons and contestants. There are also
 helpful tables on the contestants that appear to be standardized, and
 thus easy to scrape, across the sites. Python code was used in this
 Rmarkdown file since there are more options for packages that do
-web-scraping in Python. The below shows the Python code used to get the
-data.</p>
+web-scraping in Python. The code below shows how I collected the data. I
+ran it once, saved the results to files, and the analysis further down
+reads those saved files, so the page does not re-scrape the wiki every
+time it is built.</p>
 <p>Here are the libraries I used.</p>
-<pre class="python"><code>
-import requests
+<pre class="python"><code>import requests
 import pandas as pd
 import numpy as np
 import plotly.express as px
@@ -344,60 +326,41 @@ import re</code></pre>
 <p>I started by pulling episode information from the <a
 href="https://hellskitchen.fandom.com/wiki/List_of_Hell%27s_Kitchen_Episodes">Wiki’s
 episode list</a>.</p>
-<pre class="python"><code>
-url = &#39;https://hellskitchen.fandom.com/wiki/List_of_Hell%27s_Kitchen_Episodes&#39;
+<pre class="python"><code>url = &#39;https://hellskitchen.fandom.com/wiki/List_of_Hell%27s_Kitchen_Episodes&#39;
 html = requests.get(url).content
 df_list = pd.read_html(html)</code></pre>
-<p>Every season gets its own table as shown below.</p>
+<p>Every season gets its own table, which <code>pd.read_html</code>
+returns as a list of data frames (<code>df_list</code>).</p>
 <pre class="python"><code>df_list[0]</code></pre>
-<pre><code>##       Nº      #                     Title        Air Date
-## 0     01     01       Episode 101 - Day 1    May 30, 2005
-## 1     02     02       Episode 102 - Day 2    June 6, 2005
-## 2     03     03       Episode 103 - Day 3   June 13, 2005
-## 3     04     04       Episode 104 - Day 4   June 20, 2005
-## 4     05     05       Episode 105 - Day 5   June 27, 2005
-## 5     06     06       Episode 106 - Day 6   July 11, 2005
-## 6     07     07       Episode 107 - Day 7   July 11, 2005
-## 7     08     08       Episode 108 - Day 8   July 18, 2005
-## 8     09     09       Episode 109 - Day 9   July 25, 2005
-## 9  10/11  10/11  Episode 110/111 - Day 10  August 1, 2005</code></pre>
 <p>The current number of seasons can then be calculated by taking 1 from
 the length of the list (there’s an extra table that’s being pulled).</p>
 <pre class="python"><code>maxseason = len(df_list)
 maxseason = maxseason - 1
 maxseason</code></pre>
-<pre><code>## 22</code></pre>
-<p>The above shows that there are currently 22 seasons. I can start by
-just pulling the first season’s information.</p>
+<p>When I collected the data there were 18 seasons. I can start by just
+pulling the first season’s information.</p>
 <pre class="python"><code>seasonurl = &#39;https://hellskitchen.fandom.com/wiki/Season_&#39;
 seasonstart = 1
 seasonurl1 = seasonurl + str(seasonstart)
 htmls1 = requests.get(seasonurl1).content
 lists1 = pd.read_html(htmls1)
 lists1[0]</code></pre>
-<pre><code>##    Hell&#39;s Kitchen Seasons  ...  Hell&#39;s Kitchen Seasons.23
-## 0                       1  ...                         24
-## 
-## [1 rows x 24 columns]</code></pre>
-<p>Since there are only 22 seasons we could manually just create all
+<p>Since there are only 18 seasons we could manually just create all
 these lines of code but the below shows a simple loop to get the rest of
 the season’s information then append onto season 1. I start by renaming
 some things.</p>
-<pre class="python"><code>
-seasondf = lists1[0]
+<pre class="python"><code>seasondf = lists1[0]
 seasondf[&#39;Season&#39;] = 1
 seasondfs = seasondf</code></pre>
 <p>Then we can create a loop that will append the rest of the Seasons to
 that frame.</p>
-<pre class="python"><code>
-for x in range(seasonstart + 1, maxseason + 1):
+<pre class="python"><code>for x in range(seasonstart + 1, maxseason + 1):
     sur = seasonurl + str(x)
     htmls = requests.get(sur).content
     lists = pd.read_html(htmls)
     seasondf = lists[0]
     seasondf[&#39;Season&#39;] = x
-    seasondfs = seasondfs._append(seasondf)
-    </code></pre>
+    seasondfs = seasondfs._append(seasondf)</code></pre>
 <p>The table already has some interesting information about the
 contestants such as age, occupation, and hometown. But we can visit each
 contestants’ personal website as well to get even more. It appears that
@@ -412,21 +375,10 @@ contestant1 = requests.get(contestanturl).content
 
 contestant1tables = pd.read_html(contestant1)
 contestant1tables</code></pre>
-<pre><code>## [Empty DataFrame
-## Columns: [(Week 1, Week 2, Week 3, Week 4, Week 5, Week 6, Week 7, Week 8, Week 9, Week 10, Week 11, Week 12, Week 13), (Safe, Win, Safe, Safe, Win, Safe, Win, Safe, Safe, Safe, Safe, Safe, Quit)]
-## Index: [],                                                    0   1
-## 0  ↑ (September 28, 2018). &quot;Episode 1801 - Rookie... NaN,                 Hell&#39;s Kitchen: Rookies vs. Veterans
-##                                                Staff
-## 0  Gordon Ramsay (Head Chef) • Jocky Petrie (Blue...
-## 1                                        Contestants
-## 2                                           Veterans
-## 3  Ariel Contreras-Fox • Kevin Cottle • Roe DiLeo...
-## 4                                            Rookies
-## 5  Gizzy Barton • Mia Castro • Jose DeJesus • Kan...]</code></pre>
-<p>It doesn’t look like the table we want is being pulled. This means we
+<p>The contestant pages don’t store their details in a standard table,
+so <code>read_html</code> doesn’t pick up what we want. This means we
 have to dive more into the webpage.</p>
-<pre class="python"><code>
-soup = BeautifulSoup(contestant1, features=&quot;lxml&quot;)</code></pre>
+<pre class="python"><code>soup = BeautifulSoup(contestant1, features=&quot;lxml&quot;)</code></pre>
 <p>The object soup now contains a mess of text from the webpage. We know
 that the title for the variables is in a section called h3 with a class
 titled pi-data-label pi-secondary-font. Those match up with the answer
@@ -435,19 +387,16 @@ pi-font. Basically, since the table is not well defined in the web page
 it’s going to take some more effort to get the information out of
 it.</p>
 <pre class="python"><code>soup_titles = soup.find_all(&#39;h3&#39;, {&#39;class&#39; :&#39;pi-data-label pi-secondary-font&#39;})
-soup_titles</code></pre>
-<pre><code>## [&lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Hometown&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Occupation&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Culinary Education&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Signature Dish Challenge Score&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Blind Taste Test Score&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Challenges Won&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Services Won&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Times as BoW/Announcer&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Times Nominated&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Placement&lt;/h3&gt;, &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Episode Eliminated&lt;/h3&gt;]</code></pre>
-<pre class="python"><code>soup_answers = soup.find_all(&#39;div&#39;, {&#39;class&#39; :&#39;pi-data-value pi-font&#39;})
+soup_titles
+
+soup_answers = soup.find_all(&#39;div&#39;, {&#39;class&#39; :&#39;pi-data-value pi-font&#39;})
 soup_answers</code></pre>
-<pre><code>## [&lt;div class=&quot;pi-data-value pi-font&quot;&gt;Baton Rouge, LA&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;Executive Chef&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;Self taught&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;3 out of 5&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;3 out of 4&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;4&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;3&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;0&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;0&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;4th&lt;/div&gt;, &lt;div class=&quot;pi-data-value pi-font&quot;&gt;&lt;a href=&quot;/wiki/Episode_1814_-_What%27s_Your_Motto%3F&quot; title=&quot;Episode 1814 - What&#39;s Your Motto?&quot;&gt;What&#39;s Your Motto?&lt;/a&gt;&lt;/div&gt;]</code></pre>
-<p>We can now see a lot of useful information we would want to gather
-for the contestants such as challenges won, times nominated for
-elimination, and most importantly their placement. We can pull each
-question and answer by using the below code.</p>
-<pre class="python"><code>soup_titles[0]</code></pre>
-<pre><code>## &lt;h3 class=&quot;pi-data-label pi-secondary-font&quot;&gt;Hometown&lt;/h3&gt;</code></pre>
-<pre class="python"><code>soup_answers[0]</code></pre>
-<pre><code>## &lt;div class=&quot;pi-data-value pi-font&quot;&gt;Baton Rouge, LA&lt;/div&gt;</code></pre>
+<p>These contain a lot of useful information we want to gather for the
+contestants such as challenges won, times nominated for elimination, and
+most importantly their placement. We can pull each question and answer
+by using the below code.</p>
+<pre class="python"><code>soup_titles[0]
+soup_answers[0]</code></pre>
 <br>
 <center>
 <img src="pics/comp.gif" width="400" />
@@ -459,23 +408,20 @@ it up.</p>
 answer0 = str(soup_answers[0])
 
 titleout = re.search(&#39;&gt;(.*)&lt;&#39;, title0)
-titleout.group(1)</code></pre>
-<pre><code>## &#39;Hometown&#39;</code></pre>
-<pre class="python"><code>answerout = re.search(&#39;&gt;(.*)&lt;&#39;, answer0)
+titleout.group(1)
+
+answerout = re.search(&#39;&gt;(.*)&lt;&#39;, answer0)
 answerout.group(1)</code></pre>
-<pre><code>## &#39;Baton Rouge, LA&#39;</code></pre>
 <p>Now we can use a loop to loop through all the questions. We can
 create a new table with three columns that have name, title, and
 answer.</p>
-<pre class="python"><code>
-contestanturlb = &#39;https://hellskitchen.fandom.com/wiki/&#39;
+<pre class="python"><code>contestanturlb = &#39;https://hellskitchen.fandom.com/wiki/&#39;
 contestantname = &#39;Chris Motto&#39;
 contestanturl = contestanturlb + contestantname.replace(&quot; &quot;, &quot;_&quot;)
 contestant1 = requests.get(contestanturl).content
 soup = BeautifulSoup(contestant1, features=&quot;lxml&quot;)
 soup_answers = soup.find_all(&#39;div&#39;, {&#39;class&#39; :&#39;pi-data-value pi-font&#39;})
-soup_titles = soup.find_all(&#39;h3&#39;, {&#39;class&#39; :&#39;pi-data-label pi-secondary-font&#39;})
-</code></pre>
+soup_titles = soup.find_all(&#39;h3&#39;, {&#39;class&#39; :&#39;pi-data-label pi-secondary-font&#39;})</code></pre>
 <p>Now let’s loop through that data and put it in a data frame starting
 from zero to max length of titles.</p>
 <pre class="python"><code>titlelen = len(soup_titles)
@@ -496,20 +442,6 @@ for x in range(0, titlelen):
 
     
 dfsoup</code></pre>
-<pre><code>##              A  ...                                                  C
-## 0  Chris Motto  ...                                    Baton Rouge, LA
-## 0  Chris Motto  ...                                     Executive Chef
-## 0  Chris Motto  ...                                        Self taught
-## 0  Chris Motto  ...                                         3 out of 5
-## 0  Chris Motto  ...                                         3 out of 4
-## 0  Chris Motto  ...                                                  4
-## 0  Chris Motto  ...                                                  3
-## 0  Chris Motto  ...                                                  0
-## 0  Chris Motto  ...                                                  0
-## 0  Chris Motto  ...                                                4th
-## 0  Chris Motto  ...  &lt;a href=&quot;/wiki/Episode_1814_-_What%27s_Your_Mo...
-## 
-## [11 rows x 3 columns]</code></pre>
 <p>We already have a data frame that has all the names so let’s create a
 series using that and create an empty dataframe with three columns. We
 also need to get unique names only as some participants have been in
@@ -577,7 +509,8 @@ below.</p>
         dftest = pd.DataFrame(columns=list(&#39;ABC&#39;))
         dftest.loc[0] = [Name,Title, Answer]
         dfcontestants = dfcontestants._append(dftest)</code></pre>
-<p>So now we have the data we want pulled but there’s one issue.</p>
+<p>So now we have the data we want pulled but there’s one issue: it’s in
+long, raw form.</p>
 <br>
 <center>
 <img src="pics/raw.gif" width="400" />
@@ -606,40 +539,40 @@ into a more broad category for the contestants.</p>
 <p>Now we can look at what variables relate to participants’ placement.
 Due to seasons having a varied number of contestants the 12th place is
 actually placement 12 or larger.</p>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-5c32f0a12372c59b924f" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-5c32f0a12372c59b924f">{"x":{"visdat":{"50e42e79487b":["function () ","plotlyVisDat"]},"cur_data":"50e42e79487b","attrs":{"50e42e79487b":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mean Age by Placement","xaxis":{"domain":[0,1],"automargin":true,"range":[12.5,0.5],"title":"Place"},"yaxis":{"domain":[0,1],"automargin":true,"range":[20,40],"title":"Age"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[28.777777777777779,30.944444444444443,27.555555555555557,30.722222222222221,30.444444444444443,29,30.5,33.111111111111114,29.722222222222221,33.055555555555557,31.055555555555557,32.061224489795919],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-8200355843f4f27053d8" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-8200355843f4f27053d8">{"x":{"visdat":{"5688583460f6":["function () ","plotlyVisDat"]},"cur_data":"5688583460f6","attrs":{"5688583460f6":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mean Age by Placement","xaxis":{"domain":[0,1],"automargin":true,"range":[12.5,0.5],"title":"Place"},"yaxis":{"domain":[0,1],"automargin":true,"range":[20,40],"title":"Age"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[28.777777777777779,30.944444444444443,27.555555555555557,30.722222222222221,30.444444444444443,29,30.5,33.111111111111114,29.722222222222221,33.055555555555557,31.055555555555557,32.061224489795919],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>There doesn’t seem to be any relation between age and final
 placement. Now let’s see if pronoun relates to final placement. The she
 pronoun was given a value of 1 and the he was given a value of 0 so we
 can see the percentage of she contestants at each placement.</p>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-6436a4686a46302c250e" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-6436a4686a46302c250e">{"x":{"visdat":{"50e46746b83":["function () ","plotlyVisDat"]},"cur_data":"50e46746b83","attrs":{"50e46746b83":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Proportion of She by Placement","xaxis":{"domain":[0,1],"automargin":true,"range":[12,1],"title":"Place"},"yaxis":{"domain":[0,1],"automargin":true,"range":[0,1],"title":"Pronoun"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[0.66666666666666663,0.44444444444444442,0.72222222222222221,0.55555555555555558,0.55555555555555558,0.44444444444444442,0.44444444444444442,0.55555555555555558,0.5,0.27777777777777779,0.33333333333333331,0.47959183673469385],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-a47f4aa4a4a9b1ebc54f" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-a47f4aa4a4a9b1ebc54f">{"x":{"visdat":{"56887aa125ce":["function () ","plotlyVisDat"]},"cur_data":"56887aa125ce","attrs":{"56887aa125ce":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Proportion of She by Placement","xaxis":{"domain":[0,1],"automargin":true,"range":[12,1],"title":"Place"},"yaxis":{"domain":[0,1],"automargin":true,"range":[0,1],"title":"Pronoun"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[0.66666666666666663,0.44444444444444442,0.72222222222222221,0.55555555555555558,0.55555555555555558,0.44444444444444442,0.44444444444444442,0.55555555555555558,0.5,0.27777777777777779,0.33333333333333331,0.47959183673469385],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>There is a bit more of a trend with she contestants being more likely
 to win it seems despite the he and she contestants being very equal when
 looking at overall contestants (the proportion of she is 0.4932432).</p>
 <p>Let’s see if trends become more clear if we group placements.</p>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-0459c5062baf8166b5c4" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-0459c5062baf8166b5c4">{"x":{"visdat":{"50e4751d2bd":["function () ","plotlyVisDat"]},"cur_data":"50e4751d2bd","attrs":{"50e4751d2bd":{"error_y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mean Age by Placement","yaxis":{"domain":[0,1],"automargin":true,"range":[20,40],"title":"Age"},"xaxis":{"domain":[0,1],"automargin":true,"title":"PlaceGroup","type":"category","categoryorder":"array","categoryarray":["10th+","9th-5th","4th-1st"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"error_y":{"color":"#000000","array":[6.6148429253109802,4.484715827824326,6.0457111288052374]},"x":["10th+","9th-5th","4th-1st"],"y":[31.905172413793103,30.972222222222221,29.5],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-ff80659580b0d30b2aed" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-ff80659580b0d30b2aed">{"x":{"visdat":{"56885867405":["function () ","plotlyVisDat"]},"cur_data":"56885867405","attrs":{"56885867405":{"error_y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mean Age by Placement","yaxis":{"domain":[0,1],"automargin":true,"range":[20,40],"title":"Age"},"xaxis":{"domain":[0,1],"automargin":true,"title":"PlaceGroup","type":"category","categoryorder":"array","categoryarray":["10th+","9th-5th","4th-1st"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"error_y":{"color":"#000000","array":[6.6148429253109802,4.484715827824326,6.0457111288052374]},"x":["10th+","9th-5th","4th-1st"],"y":[31.905172413793103,30.972222222222221,29.5],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The trend in lower age is still weak but now that the places are
 grouped we can probably add in standard deviation for a better look.</p>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-9596e2bf1d3273c11a58" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-9596e2bf1d3273c11a58">{"x":{"visdat":{"50e41d243806":["function () ","plotlyVisDat"]},"cur_data":"50e41d243806","attrs":{"50e41d243806":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Proportion of She by Placement","yaxis":{"domain":[0,1],"automargin":true,"range":[0,1],"title":"Pronoun"},"xaxis":{"domain":[0,1],"automargin":true,"title":"PlaceGroup","type":"category","categoryorder":"array","categoryarray":["10th+","9th-5th","4th-1st"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["10th+","9th-5th","4th-1st"],"y":[0.45689655172413796,0.46296296296296297,0.59722222222222221],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-6bb03c98bba8e332e5c8" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-6bb03c98bba8e332e5c8">{"x":{"visdat":{"56889a14836":["function () ","plotlyVisDat"]},"cur_data":"56889a14836","attrs":{"56889a14836":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Proportion of She by Placement","yaxis":{"domain":[0,1],"automargin":true,"range":[0,1],"title":"Pronoun"},"xaxis":{"domain":[0,1],"automargin":true,"title":"PlaceGroup","type":"category","categoryorder":"array","categoryarray":["10th+","9th-5th","4th-1st"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["10th+","9th-5th","4th-1st"],"y":[0.45689655172413796,0.46296296296296297,0.59722222222222221],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>Even though it’s not strong, the final 4 tend to skew more towards
 she than he.</p>
 <p>Let’s see if occupation category changes over placement.</p>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-7d4f3127dc50f325a3a8" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-7d4f3127dc50f325a3a8">{"x":{"visdat":{"50e412a953c9":["function () ","plotlyVisDat"]},"cur_data":"50e412a953c9","attrs":{"50e412a953c9":{"x":{},"y":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Job Category by Placement","xaxis":{"domain":[0,1],"automargin":true,"title":"Placement","type":"category","categoryorder":"array","categoryarray":["10th+","9th-5th","4th-1st"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Frequency"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["10th+","9th-5th","4th-1st"],"y":[34,27,19],"type":"bar","name":"Business or Management","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[36,50,26],"type":"bar","name":"Chef","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[23,21,15],"type":"bar","name":"Cook","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[6,3,4],"type":"bar","name":"Education","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[7,2,2],"type":"bar","name":"Other","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[10,5,6],"type":"bar","name":"Private/Personal Chef","marker":{"color":"rgba(255,217,47,1)","line":{"color":"rgba(255,217,47,1)"}},"textfont":{"color":"rgba(255,217,47,1)"},"error_y":{"color":"rgba(255,217,47,1)"},"error_x":{"color":"rgba(255,217,47,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-eb8fad0e6bc627ce27ff" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-eb8fad0e6bc627ce27ff">{"x":{"visdat":{"568813244d99":["function () ","plotlyVisDat"]},"cur_data":"568813244d99","attrs":{"568813244d99":{"x":{},"y":{},"color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20]}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Job Category by Placement","xaxis":{"domain":[0,1],"automargin":true,"title":"Placement","type":"category","categoryorder":"array","categoryarray":["10th+","9th-5th","4th-1st"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Frequency"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["10th+","9th-5th","4th-1st"],"y":[34,27,19],"type":"bar","name":"Business or Management","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[36,50,26],"type":"bar","name":"Chef","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[23,21,15],"type":"bar","name":"Cook","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[6,3,4],"type":"bar","name":"Education","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[7,2,2],"type":"bar","name":"Other","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["10th+","9th-5th","4th-1st"],"y":[10,5,6],"type":"bar","name":"Private/Personal Chef","marker":{"color":"rgba(255,217,47,1)","line":{"color":"rgba(255,217,47,1)"}},"textfont":{"color":"rgba(255,217,47,1)"},"error_y":{"color":"rgba(255,217,47,1)"},"error_x":{"color":"rgba(255,217,47,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>The occupations distribution of each group also seems very consistent
 across grouping.</p>
 <p>Let’s see how performance relates to grouping. We should see a
 negative correlation between services won and placement.</p>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-c5e062152d2b30c028f6" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-c5e062152d2b30c028f6">{"x":{"visdat":{"50e41712d21":["function () ","plotlyVisDat"]},"cur_data":"50e41712d21","attrs":{"50e41712d21":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mean Services Won by Placement","xaxis":{"domain":[0,1],"automargin":true,"title":"Placement","range":[12.5,0.5]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Services Won","range":[0,15]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[4.3888888888888893,4.1111111111111107,4.3888888888888893,3.9444444444444446,4.166666666666667,4.2222222222222223,2.7777777777777777,3.1111111111111112,2.6111111111111112,2.6666666666666665,2.1666666666666665,1.0204081632653061],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-8f6557c6fba61f514911" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-8f6557c6fba61f514911">{"x":{"visdat":{"568852073511":["function () ","plotlyVisDat"]},"cur_data":"568852073511","attrs":{"568852073511":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mean Services Won by Placement","xaxis":{"domain":[0,1],"automargin":true,"title":"Placement","range":[12.5,0.5]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Services Won","range":[0,15]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[4.3888888888888893,4.1111111111111107,4.3888888888888893,3.9444444444444446,4.166666666666667,4.2222222222222223,2.7777777777777777,3.1111111111111112,2.6111111111111112,2.6666666666666665,2.1666666666666665,1.0204081632653061],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>We do see a negative correlation (the placement axis is reversed) but
 it seems to even out at around 6th place. Let’s see how times nominated
 relates to placement.</p>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-3b5320bae3fb264be3b8" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-3b5320bae3fb264be3b8">{"x":{"visdat":{"50e456126542":["function () ","plotlyVisDat"]},"cur_data":"50e456126542","attrs":{"50e456126542":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Times Nominated by Placement","xaxis":{"domain":[0,1],"automargin":true,"title":"Placement","range":[12.5,0.5]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Times Nominated","range":[0,6]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[1.1666666666666667,1.3888888888888888,1.6111111111111112,3.1111111111111112,3.1111111111111112,2.7222222222222223,2.6666666666666665,2.8333333333333335,2.5,1.8333333333333333,1.6666666666666667,1.4081632653061225],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-9c8d0012c56ef59fa983" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-9c8d0012c56ef59fa983">{"x":{"visdat":{"56881ca27d6d":["function () ","plotlyVisDat"]},"cur_data":"56881ca27d6d","attrs":{"56881ca27d6d":{"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Times Nominated by Placement","xaxis":{"domain":[0,1],"automargin":true,"title":"Placement","range":[12.5,0.5]},"yaxis":{"domain":[0,1],"automargin":true,"title":"Times Nominated","range":[0,6]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[1,2,3,4,5,6,7,8,9,10,11,12],"y":[1.1666666666666667,1.3888888888888888,1.6111111111111112,3.1111111111111112,3.1111111111111112,2.7222222222222223,2.6666666666666665,2.8333333333333335,2.5,1.8333333333333333,1.6666666666666667,1.4081632653061225],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,0.2)"},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>Here we see a bit of a U shape which makes sense. The worst
 performers would only get nominated once and then eliminated while those
 in the middle might be nominated but weren’t eliminated. People who
@@ -647,8 +580,8 @@ ended up being in the top 3 seem to have been nominated very little even
 when there were many times they could have been nominated.</p>
 <p>Even though there were only 39 contestants with Kitchen Experience
 listed it would be interesting to see how that related to placement.</p>
-<div class="plotly html-widget html-fill-item" id="htmlwidget-dc6a483d892d5e73f4e6" style="width:672px;height:480px;"></div>
-<script type="application/json" data-for="htmlwidget-dc6a483d892d5e73f4e6">{"x":{"visdat":{"50e452233215":["function () ","plotlyVisDat"]},"cur_data":"50e452233215","attrs":{"50e452233215":{"error_y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mean Age by Placement","yaxis":{"domain":[0,1],"automargin":true,"range":[0,20],"title":"KE"},"xaxis":{"domain":[0,1],"automargin":true,"title":"PlaceGroup","type":"category","categoryorder":"array","categoryarray":["10th+","9th-5th","4th-1st"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"error_y":{"color":"#000000","array":[7.2267056620063563,1.9692073983655907,6.5334305143404015]},"x":["10th+","9th-5th","4th-1st"],"y":[11.928571428571429,10.6,8.9000000000000004],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<div class="plotly html-widget html-fill-item" id="htmlwidget-f99959a17e9e146cbc28" style="width:672px;height:480px;"></div>
+<script type="application/json" data-for="htmlwidget-f99959a17e9e146cbc28">{"x":{"visdat":{"56887b10e7":["function () ","plotlyVisDat"]},"cur_data":"56887b10e7","attrs":{"56887b10e7":{"error_y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"x":{},"y":{},"type":"scatter","mode":"lines","alpha":0.20000000000000001,"line":{"color":"#B42020"},"inherit":true}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"title":"Mean Age by Placement","yaxis":{"domain":[0,1],"automargin":true,"range":[0,20],"title":"KE"},"xaxis":{"domain":[0,1],"automargin":true,"title":"PlaceGroup","type":"category","categoryorder":"array","categoryarray":["10th+","9th-5th","4th-1st"]},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"error_y":{"color":"#000000","array":[7.2267056620063563,1.9692073983655907,6.5334305143404015]},"x":["10th+","9th-5th","4th-1st"],"y":[11.928571428571429,10.6,8.9000000000000004],"type":"scatter","mode":"lines","line":{"color":"#B42020"},"marker":{"color":"rgba(31,119,180,0.2)","line":{"color":"rgba(31,119,180,1)"}},"error_x":{"color":"rgba(31,119,180,0.2)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
 <p>Years of kitchen experience tends to be lower in the higher placed
 group but there’s still a wide range in those who rank near last and
 those who rank near first. Interestingly, the middle group had a more
@@ -806,6 +739,7 @@ diverse in a variety of variables.</p>
 <img src="pics/bon.gif" width="400" />
 </center>
 <p><br></p>
+</div>
 
 
 
